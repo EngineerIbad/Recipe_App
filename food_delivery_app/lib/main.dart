@@ -33,7 +33,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
             seedColor: const Color.fromARGB(199, 176, 186, 36)),
         useMaterial3: true,
+        scaffoldBackgroundColor: Colors.white
       ),
+      
       initialRoute: RoutesName.splash,
       onGenerateRoute: Routes.generateRoute,
       debugShowCheckedModeBanner: false,

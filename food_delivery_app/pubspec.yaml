@@ -27,6 +27,9 @@ dependencies:
   http_parser: ^4.0.2
   flutter_dotenv: ^5.1.0
 
+  # For date formatting
+  intl: ^0.18.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -38,6 +41,7 @@ flutter:
 
   assets:
     - lib/keys/api_key.env
+    - asset/splash.jpg
     
 
   # fonts:
