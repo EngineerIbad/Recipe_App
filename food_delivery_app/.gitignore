@@ -8,6 +8,9 @@
 .buildlog/
 .history
 .svn/
+
+.lib/keys/api_key.env
+
 migrate_working_dir/
 
 # IntelliJ related

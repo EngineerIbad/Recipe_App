@@ -25,6 +25,7 @@ dependencies:
   # HTTP Package for API Integration
   http: ^1.1.0
   http_parser: ^4.0.2
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -34,3 +35,19 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - lib/keys/api_key.env
+    
+
+  # fonts:
+  #   - family: Manrope
+  #     fonts:
+  #       - asset: assets/font/static/Manrope-Bold.ttf
+  #       - asset: assets/font/static/Manrope-ExtraBold.ttf
+  #       - asset: assets/font/static/Manrope-ExtraLight.ttf
+  #       - asset: assets/font/static/Manrope-Light.ttf
+  #       - asset: assets/font/static/Manrope-Medium.ttf
+  #       - asset: assets/font/static/Manrope-Regular.ttf
+  #       - asset: assets/font/static/Manrope-SemiBold.ttf
+
