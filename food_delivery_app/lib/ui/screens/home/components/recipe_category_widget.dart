@@ -12,17 +12,17 @@ class RecipeCategoryWidget extends StatelessWidget {
   const RecipeCategoryWidget({
     super.key,
     required this.category,
-    required this.onTap, 
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 100.percentHeight(context),
-        width: 90.percentWidth(context),
-        margin: 4.paddingH(context),
+    return Container(
+      height: 100.percentHeight(context),
+      width: 90.percentWidth(context),
+      margin: 4.paddingH(context),
+      child: GestureDetector(
+        onTap: onTap,
         child: Stack(
           children: [
             ClipRRect(

@@ -34,8 +34,10 @@ dependencies:
   # For internet connectivity
   connectivity_plus: ^5.0.2
 
-
+  # Used to display Recipe Categories in HomePage.
   carousel_slider: ^4.2.1
+
+  # Used to display summary of a recipe on Recipe Details Screen
 
 dev_dependencies:
   flutter_test:

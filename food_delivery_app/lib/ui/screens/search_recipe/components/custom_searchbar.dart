@@ -8,19 +8,22 @@ class CustomSearchBar extends StatelessWidget {
   final TextEditingController searchController;
   final double? height, width;
   final Widget? leading;
+  final Function(String) onSubmit;
   const CustomSearchBar({
     super.key,
     required this.searchController,
     this.height,
     this.width,
-    this.leading, 
+    this.leading,
+    required this.onSubmit,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Align( 
+    return Align(
       alignment: Alignment.center,
       child: SearchBar(
+        onSubmitted: onSubmit,
         padding: MaterialStatePropertyAll(
           4.paddingV(context).copyWith(
                 left: 16.pxH(context),

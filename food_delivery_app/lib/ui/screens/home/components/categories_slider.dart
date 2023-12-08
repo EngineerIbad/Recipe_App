@@ -1,17 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/bloc/get_recipes_bloc/get_recipes_bloc.dart';
 import 'package:food_delivery_app/models/recipe_category_model.dart';
 import 'package:food_delivery_app/shared/image_path.dart';
 import 'package:food_delivery_app/shared/responsiveness/media_query.dart';
 import 'package:food_delivery_app/ui/screens/home/components/recipe_category_widget.dart';
-import 'package:food_delivery_app/routes/route_names.dart';
 
 class CategoriesSlider extends StatefulWidget {
-  final GetRecipeBloc bloc;
+  final Function(int) onTapOfCategory;
   const CategoriesSlider({
     super.key,
-    required this.bloc,
+    required this.onTapOfCategory,
   });
 
   @override
@@ -48,22 +46,7 @@ class _CategoriesSliderState extends State<CategoriesSlider> {
       itemBuilder: (context, index, nextInd) => RecipeCategoryWidget(
         category: carousels[index],
         onTap: () {
-          switch (index) {
-            case 0: // Veg
-              widget.bloc.add(GetVegRecipeEvent(offset: 20));
-              break;
-            case 1: // Vegan
-              widget.bloc.add(GetVeganRecipeEvent(offset: 20));
-              break;
-            case 2: // Dairy Free
-              widget.bloc.add(GetDairyFreeRecipeEvent(offset: 20));
-              break;
-            case 3: // Cheap
-              widget.bloc.add(GetCheapRecipeEvent(offset: 20));
-              break;
-          }
-
-          Navigator.pushNamed(context, RoutesName.allRecipesScreen);
+          widget.onTapOfCategory(index);
         },
       ),
       options: CarouselOptions(

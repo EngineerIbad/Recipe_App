@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:food_delivery_app/models/recipe_model.dart';
 import 'package:food_delivery_app/ui/screens/favourite_recipes/repositories/favourite_recipes_db_handler.dart';
+import 'package:food_delivery_app/ui/screens/home/repositories/get_recipe_repository.dart';
 
 part 'favourite_recipe_event.dart';
 part 'favourite_recipe_state.dart';
@@ -49,12 +50,21 @@ class FavouriteRecipeBloc
     Emitter<FavouriteRecipeState> emit,
   ) async {
     emit(AddRecipeToFavouriteLoadingState());
-    await favouriteRecipesDBHandler.addRecipeToFavourite(event.recipe);
 
-    event.recipe.isMarkedFavourite = true;
-    favouriteRecipesList.add(event.recipe);
+    final GetRecipeRepo repo = GetRecipeRepo();
 
-    emit(AddRecipeToFavouriteSuccessState());
+    Recipe? recipe = await repo.getRecipeDetails(event.recipe.id);
+
+    if (recipe == null) {
+      emit(AddRecipeToFavouriteFaileState());
+    } else {
+      await favouriteRecipesDBHandler.addRecipeToFavourite(recipe);
+
+      event.recipe.isMarkedFavourite = true;
+      favouriteRecipesList.add(recipe);
+
+      emit(AddRecipeToFavouriteSuccessState());
+    }
   }
 
   FutureOr<void> removeRecipeFromFavouriteEvent(
@@ -62,12 +72,13 @@ class FavouriteRecipeBloc
     Emitter<FavouriteRecipeState> emit,
   ) async {
     emit(RemoveRecipeFromFavourieLoadingState());
-    await Future.delayed(const Duration(milliseconds: 400));
 
+    await Future.delayed(const Duration(milliseconds: 400));
     bool isDeleted =
         await favouriteRecipesDBHandler.removeRecipeFromFavourite(event.recipe);
 
     if (isDeleted) {
+      event.recipe.isMarkedFavourite = false;
       favouriteRecipesList.remove(event.recipe);
       emit(RemoveRecipeFromFavourieSuccessState(recipe: event.recipe));
     } else {

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery_app/bloc/favourite_recipe_bloc/favourite_recipe_bloc.dart';
 import 'package:food_delivery_app/bloc/get_recipes_bloc/get_recipes_bloc.dart';
+import 'package:food_delivery_app/routes/route_names.dart';
+import 'package:food_delivery_app/shared/bloc_instances.dart';
 import 'package:food_delivery_app/shared/colors.dart';
 import 'package:food_delivery_app/shared/custom_text_styles.dart';
 import 'package:food_delivery_app/shared/extensions/padding.dart';
@@ -13,10 +15,8 @@ import 'package:food_delivery_app/ui/shared_components/custom_loader.dart';
 import 'package:food_delivery_app/ui/shared_components/no_data_widget.dart';
 
 class FavouriteRecipesScreen extends StatefulWidget {
-  final GetRecipeBloc getRecipeBloc;
   const FavouriteRecipesScreen({
     super.key,
-    required this.getRecipeBloc,
   });
 
   @override
@@ -25,10 +25,10 @@ class FavouriteRecipesScreen extends StatefulWidget {
 
 class _FavouriteRecipesScreenState extends State<FavouriteRecipesScreen> {
   TextEditingController? searchController;
-  FavouriteRecipeBloc favouriteRecipeBloc = FavouriteRecipeBloc();
 
   getAllFavouriteRecipesFromLocalDB() async {
-    favouriteRecipeBloc.add(GetAllFavouriteRecipesFromLocalDBInitialEvent());
+    BlocInstances.favouriteRecipeBloc
+        .add(GetAllFavouriteRecipesFromLocalDBInitialEvent());
   }
 
   @override
@@ -72,43 +72,56 @@ class _FavouriteRecipesScreenState extends State<FavouriteRecipesScreen> {
               ),
             ),
             Expanded(
-              child: BlocConsumer<FavouriteRecipeBloc, FavouriteRecipeState>(
-                bloc: favouriteRecipeBloc,
-                listener: (context, state) {
-                  if (state is RemoveRecipeFromFavourieSuccessState) {
-                    widget.getRecipeBloc.add(UnMarkAllFavouritesEvent(recipe: state.recipe));
-                  }
-                },
-                builder: (context, favBlocState) {
-                  if (favBlocState
-                          is GetAllFavouriteRecipesFromLocalDBELoadingState ||
-                      favBlocState is RemoveRecipeFromFavourieLoadingState) {
-                    return CustomLoader.loader(context);
-                  } else if (favBlocState
-                      is GetAllFavouriteRecipesFromLocalDBErrorState) {
-                    return const NoDataWidget(
-                      message: "Nothing In the Favourites",
-                      showButton: false,
-                    );
-                  } else {
-                    if (favouriteRecipeBloc.favouriteRecipesList.isEmpty) {
+              child: BlocBuilder<GetRecipeBloc, GetRecipesState>(
+                bloc: BlocInstances.getRecipeBloc,
+                builder: (context, getRecipeState) =>
+                    BlocConsumer<FavouriteRecipeBloc, FavouriteRecipeState>(
+                  bloc: BlocInstances.favouriteRecipeBloc,
+                  listener: (context, state) {
+                    if (state is RemoveRecipeFromFavourieSuccessState) {
+                      BlocInstances.getRecipeBloc
+                          .add(UnMarkAllFavouritesEvent(recipe: state.recipe));
+                    }
+                  },
+                  builder: (context, favBlocState) {
+                    if (favBlocState
+                            is GetAllFavouriteRecipesFromLocalDBELoadingState ||
+                        favBlocState is RemoveRecipeFromFavourieLoadingState) {
+                      return CustomLoader.loader(context);
+                    } else if (favBlocState
+                        is GetAllFavouriteRecipesFromLocalDBErrorState) {
                       return const NoDataWidget(
                         message: "Nothing In the Favourites",
                         showButton: false,
                       );
-                    }
+                    } else {
+                      if (BlocInstances
+                          .favouriteRecipeBloc.favouriteRecipesList.isEmpty) {
+                        return const NoDataWidget(
+                          message: "Nothing In the Favourites",
+                          showButton: false,
+                        );
+                      }
 
-                    return ListView.builder(
-                      itemCount:
-                          favouriteRecipeBloc.favouriteRecipesList.length,
-                      itemBuilder: (context, index) => FavouriteRecipeWidget(
-                        recipe: favouriteRecipeBloc.favouriteRecipesList[index],
-                        delete: (recipe) => favouriteRecipeBloc.add(
-                            RemoveRecipeFromFavouriteEvent(recipe: recipe)),
-                      ),
-                    );
-                  }
-                },
+                      return ListView.builder(
+                        itemCount: BlocInstances
+                            .favouriteRecipeBloc.favouriteRecipesList.length,
+                        itemBuilder: (context, index) => FavouriteRecipeWidget(
+                          recipe: BlocInstances
+                              .favouriteRecipeBloc.favouriteRecipesList[index],
+                          delete: (recipe) =>
+                              BlocInstances.favouriteRecipeBloc.add(
+                            RemoveRecipeFromFavouriteEvent(recipe: recipe),
+                          ),
+                          onTap: (recipe) {
+                            BlocInstances.recipe = recipe;
+                            Navigator.pushNamed(context, RoutesName.recipeDetailsScreen);
+                          },
+                        ),
+                      );
+                    }
+                  },
+                ),
               ),
             ),
           ],

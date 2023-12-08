@@ -7,7 +7,6 @@ import 'package:food_delivery_app/ui/screens/recipe_details/recipe_details_scree
 import 'package:food_delivery_app/ui/screens/search_recipe/search_recipe_screen.dart';
 import 'package:food_delivery_app/ui/screens/splash/splash_screen.dart';
 
-import '../bloc/get_recipes_bloc/get_recipes_bloc.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -37,9 +36,8 @@ class Routes {
 
       // Favourite Recipe Screen
       case RoutesName.favouriteRecipesScreen:
-        GetRecipeBloc bloc = settings.arguments as GetRecipeBloc;
         return MaterialPageRoute(
-          builder: (context) => FavouriteRecipesScreen(getRecipeBloc: bloc),
+          builder: (context) => const FavouriteRecipesScreen(),
         );
 
       // No route defined

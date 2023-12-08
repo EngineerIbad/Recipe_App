@@ -3,14 +3,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/bloc/get_recipes_bloc/get_recipes_bloc.dart';
 import 'package:food_delivery_app/routes/route_names.dart';
 import 'package:food_delivery_app/shared/responsiveness/media_query.dart';
 
 class FavouritesIconButton extends StatelessWidget {
   final double paddingLeft, paddingRight, paddingTop, paddingBottom;
   final Future<dynamic> Function()? function;
-  final GetRecipeBloc bloc;
   const FavouritesIconButton({
     super.key,
     this.paddingLeft = 4,
@@ -18,7 +16,6 @@ class FavouritesIconButton extends StatelessWidget {
     this.paddingBottom = 4,
     this.paddingTop = 4,
     this.function,
-    required this.bloc,
   });
 
   @override
@@ -31,7 +28,6 @@ class FavouritesIconButton extends StatelessWidget {
         Navigator.pushNamed(
           context,
           RoutesName.favouriteRecipesScreen,
-          arguments: bloc,
         );
       },
       child: Padding(

@@ -14,7 +14,6 @@ class RemoveRecipeFromFavouriteEvent extends FavouriteRecipeEvent {
   RemoveRecipeFromFavouriteEvent({required this.recipe});
 }
 
-
 class GetAllFavouriteRecipesFromLocalDBInitialEvent
     extends FavouriteRecipeEvent {}
 

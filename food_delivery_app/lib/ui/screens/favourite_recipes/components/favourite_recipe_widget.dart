@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/models/recipe_model.dart';
-import 'package:food_delivery_app/routes/route_names.dart';
 import 'package:food_delivery_app/shared/colors.dart';
 import 'package:food_delivery_app/shared/extensions/padding.dart';
 import 'package:food_delivery_app/shared/extensions/sized_box.dart';
@@ -11,10 +10,12 @@ import 'package:food_delivery_app/shared/responsiveness/media_query.dart';
 class FavouriteRecipeWidget extends StatelessWidget {
   final Recipe recipe;
   final Function(Recipe) delete;
+  final Function(Recipe) onTap;
   const FavouriteRecipeWidget({
     super.key,
     required this.recipe,
     required this.delete,
+    required this.onTap,
   });
 
   @override
@@ -24,8 +25,9 @@ class FavouriteRecipeWidget extends StatelessWidget {
       width: 90.percentWidth(context),
       margin: 16.paddingH(context).copyWith(bottom: 16.pxV(context)),
       child: GestureDetector(
-        onTap: () =>
-            Navigator.pushNamed(context, RoutesName.recipeDetailsScreen),
+        onTap: () {
+          onTap(recipe);
+        },
         child: Stack(
           children: [
             ClipRRect(
@@ -34,7 +36,7 @@ class FavouriteRecipeWidget extends StatelessWidget {
                 children: [
                   Container(color: AppColors.amber),
                   Image.network(
-                    recipe.imageUrl,
+                    recipe.image,
                     fit: BoxFit.cover,
                     height: 100.percentHeight(context),
                     width: 100.percentWidth(context),
@@ -73,7 +75,7 @@ class FavouriteRecipeWidget extends StatelessWidget {
                         width: 75.percentWidth(context),
                         child: Text(
                           recipe.title,
-                          style: 16.txt(
+                          style: 24.txt(
                             context,
                             color: AppColors.white,
                             fontWeight: FontWeight.w400,
@@ -86,7 +88,7 @@ class FavouriteRecipeWidget extends StatelessWidget {
                           delete(recipe);
                         },
                         child: Padding(
-                          padding: 8.paddingH(context).copyWith(
+                          padding: 4.paddingH(context).copyWith(
                                 top: 4.pxV(context),
                                 bottom: 4.pxV(context),
                               ),
@@ -94,10 +96,12 @@ class FavouriteRecipeWidget extends StatelessWidget {
                               ? Icon(
                                   Icons.favorite_rounded,
                                   color: AppColors.amber,
+                                  size: 32.pxH(context),
                                 )
                               : Icon(
                                   Icons.favorite_outline_rounded,
                                   color: AppColors.white,
+                                  size: 32.pxH(context),
                                 ),
                         ),
                       ),

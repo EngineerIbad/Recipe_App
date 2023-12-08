@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery_app/bloc/favourite_recipe_bloc/favourite_recipe_bloc.dart';
+import 'package:food_delivery_app/shared/bloc_instances.dart';
 import 'package:food_delivery_app/shared/colors.dart';
 import 'package:food_delivery_app/shared/extensions/sized_box.dart';
 import 'package:food_delivery_app/shared/extensions/text_style_extension.dart';
@@ -16,7 +17,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  FavouriteRecipeBloc favouriteRecipeBloc = FavouriteRecipeBloc();
   @override
   void initState() {
     getAllFavouriteRecipesFromLocalDB();
@@ -25,7 +25,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   getAllFavouriteRecipesFromLocalDB() async {
-    favouriteRecipeBloc.add(GetAllFavouriteRecipesFromLocalDBInitialEvent());
+    BlocInstances.favouriteRecipeBloc
+        .add(GetAllFavouriteRecipesFromLocalDBInitialEvent());
   }
 
   void _navigateToNextScreen() {
@@ -38,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<FavouriteRecipeBloc, FavouriteRecipeState>(
-        bloc: favouriteRecipeBloc,
+        bloc: BlocInstances.favouriteRecipeBloc,
         builder: (context, state) => _splashUi(),
       ),
     );

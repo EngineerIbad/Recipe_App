@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:food_delivery_app/models/recipe_model.dart';
 import 'package:food_delivery_app/services/local_db/db_handler.dart';
@@ -17,9 +16,8 @@ class FavouriteRecipesDBHandler {
     List keys = data.keys.toList();
 
     for (dynamic key in keys) {
-      Map<String, dynamic> jsonParsedData = jsonDecode(data[key]);
-
-      recipes.add(Recipe.fromJson(jsonParsedData, isMarkedFavourite: true));
+      var jsonParsedData = Recipe.fromJson(data[key], isMarkedFavourite: true);
+      recipes.add(jsonParsedData);
     }
     return recipes;
   }
