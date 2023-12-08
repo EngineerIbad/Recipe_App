@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:food_delivery_app/bloc/favourite_recipe_bloc/favourite_recipe_bloc.dart';
+import 'package:food_delivery_app/bloc/get_recipes_bloc/get_recipes_bloc.dart';
+import 'package:food_delivery_app/bloc/internet_bloc/internet_bloc.dart';
 import 'package:food_delivery_app/environment.dart';
 import 'package:food_delivery_app/routes/route_names.dart';
 import 'package:food_delivery_app/routes/screen_routes.dart';
@@ -19,6 +23,8 @@ void main() async {
 
   /// Local Database Is Initialized
   await DBHandler.initializeDB();
+
+  /// Entry point of app
   runApp(const MyApp());
 }
 
@@ -27,18 +33,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(199, 176, 186, 36)),
-        useMaterial3: true,
-        scaffoldBackgroundColor: Colors.white
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => InternetBloc()),
+        BlocProvider(create: (context) => GetRecipeBloc()),
+        BlocProvider(create: (context) => FavouriteRecipeBloc()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromARGB(199, 176, 186, 36)),
+          useMaterial3: true,
+          scaffoldBackgroundColor: Colors.white,
+        ),
+        initialRoute: RoutesName.splash,
+        onGenerateRoute: Routes.generateRoute,
+        debugShowCheckedModeBanner: false,
       ),
-      
-      initialRoute: RoutesName.splash,
-      onGenerateRoute: Routes.generateRoute,
-      debugShowCheckedModeBanner: false,
     );
   }
 }

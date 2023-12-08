@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/environment.dart';
 import 'package:food_delivery_app/services/network/api_responses.dart';
 import 'package:food_delivery_app/services/network/exceptions.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,8 @@ abstract class BaseApiServices {
   Future<dynamic> getCall(
     String url, {
     String token = "",
+    Map<String, String>? headers,
+    required Map<String, dynamic> params,
   });
 
   Future<dynamic> postCall(
@@ -49,12 +52,26 @@ class NetworkApiService extends BaseApiServices {
   ApiResponses responseClass = ApiResponses();
 
   @override
-  Future getCall(String url, {String token = ""}) async {
+  Future getCall(
+    String url, {
+    String token = "",
+    Map<String, String>? headers,
+    required Map<String, dynamic> params,
+  }) async {
     dynamic responseJson;
     try {
-      final response = await http.get(Uri.parse(url), headers: {
-        'Authorization': 'Bearer $token',
-      }).timeout(const Duration(seconds: 10), onTimeout: errorResponse);
+      String paramsStr = "apiKey=${Environment.apiKey}";
+      if (params.isNotEmpty) {
+        params.forEach((key, value) {
+          paramsStr += "&$key=$value";
+        });
+      }
+      final response = await http
+          .get(
+            Uri.parse("$url?$paramsStr"),
+            headers: headers ?? {'Authorization': 'Bearer $token'},
+          )
+          .timeout(const Duration(seconds: 10), onTimeout: errorResponse);
       responseJson = responseClass.returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');

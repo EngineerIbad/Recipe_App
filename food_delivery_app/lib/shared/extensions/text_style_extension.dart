@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:food_delivery_app/responsiveness/media_query.dart';
+import 'package:food_delivery_app/shared/responsiveness/media_query.dart';
 
 extension TextStyleExtension on num {
   TextStyle txt(
